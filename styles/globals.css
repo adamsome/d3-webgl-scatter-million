@@ -10,6 +10,31 @@
   html.dark {
     @apply bg-black;
   }
+
+  .x-axis .tick text,
+  .y-axis .tick text {
+    @apply text-black dark:text-white fill-current;
+  }
+
+  .x-axis path.domain,
+  .y-axis path.domain,
+  .x-axis .tick path,
+  .y-axis .tick path {
+    @apply text-black dark:text-white stroke-current;
+  }
+
+  line.gridline-x,
+  line.gridline-y {
+    @apply text-gray-200 dark:text-gray-900 stroke-current;
+  }
+
+  text.quadrant {
+    @apply text-black dark:text-white fill-current text-2xl font-bold;
+  }
+
+  rect.quadrant {
+    @apply text-gray-200 dark:text-gray-900 text-opacity-75 fill-current
+  }
 }
 
 @layer utilities {

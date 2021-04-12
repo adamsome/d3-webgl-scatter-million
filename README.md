@@ -1,27 +1,21 @@
-# NextJS Typescript Boilerplate
+# D3 WebGL Million-point Scatterplot Demo
 
-Bootstrap a developer-friendly NextJS app configured with:
+Demonstrates rendering 1 million data points in a scatterplot using D3 WebGL rendering. Uses the following:
 
-- [Typescript](https://www.typescriptlang.org/)
-- Linting with [ESLint](https://eslint.org/)
-- Formatting with [Prettier](https://prettier.io/)
-- Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
-- Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
+- [TypeScript v4.1.3](https://www.typescriptlang.org) for build-time type safety
+  - [ESLint v7.19.0](https://eslint.org) for JavaScript & TypeScript linting
+  - [Prettier v2.2.1](https://prettier.io/) for code formatting
+  - [Husky v4.3.8](https://github.com/typicode/husky) for code linting and formatting in git hooks
+  - [Lint Staged v10.5.4](https://github.com/okonet/lint-staged) for linting staged files in git hooks
+- [React v17.0.1](https://reactjs.org)
+- [Tailwind CSS v2.0.2](https://tailwindcss.com/) for CSS utility
+  - [Stylelint v13.9.0](https://stylelint.io/) for CSS linting
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-eslint-jest&project-name=with-typescript-eslint-jest&repository-name=with-typescript-eslint-jest)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+## How to run
 
 ```bash
-npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
-# or
-yarn create next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
+npm install
+npm run dev
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+_Note: Requires [Node](https://nodejs.org/en/) v12+ to run._

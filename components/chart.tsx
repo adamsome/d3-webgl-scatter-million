@@ -1,9 +1,12 @@
-import React, { useEffect, useRef } from 'react'
-import scatterplot from '../lib/scatterplot'
+import React, { useEffect, useRef, useState } from 'react'
+import createScatterplot, { Scatterplot } from '../lib/scatterplot'
 import { SvgAnnotation } from '../lib/svg-annotation'
-import { useTheme } from '../util/use-theme'
+import Loading from './loading'
 
-type Props = typeof defaultProps
+type Props = typeof defaultProps & {
+  hexRadius: number
+  chroma: string
+}
 
 interface BookResponseDatum {
   title?: string
@@ -45,16 +48,14 @@ function annotate(d: BookDatum): SvgAnnotation {
   return { note, x: d.x, y: d.y, dx: 20, dy: 20 }
 }
 
-export default function Chart(_: Props) {
-  const { theme } = useTheme()
-  const chartRef = useRef<HTMLDivElement>(null)
+export default function Chart({ hexRadius, chroma }: Props) {
+  const chartRef = useRef<Scatterplot>(null)
+  const domRef = useRef<HTMLDivElement>(null)
   const tsvRef = useRef<Worker>()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const { add } = scatterplot(chartRef.current, {
-      annotate,
-      defaultColor: theme === 'dark' ? '#777' : '#777',
-    })
+    chartRef.current = createScatterplot(domRef.current).annotate(annotate)
 
     tsvRef.current = new Worker(
       new URL('../lib/tsv.worker.ts', import.meta.url)
@@ -74,20 +75,40 @@ export default function Chart(_: Props) {
       if (done) {
         // eslint-disable-next-line no-console
         console.log('tsv-done', bytes)
+        setLoading(false)
       }
 
-      add(data, { done })
+      chartRef.current(data, { done })
       i++
     }
 
+    setLoading(true)
     tsvRef.current.postMessage(DATA_URL)
 
     return () => {
       tsvRef.current.terminate()
     }
-  }, [theme])
+  }, [])
 
-  return <div ref={chartRef} className="w-full h-full"></div>
+  useEffect(() => {
+    chartRef.current.hexRadius(hexRadius)
+  }, [hexRadius])
+
+  useEffect(() => {
+    chartRef.current.chroma(chroma)
+  }, [chroma])
+
+  return (
+    <div className="relative w-full h-full">
+      <div ref={domRef} className="relative w-full h-full"></div>
+
+      {loading && (
+        <div className="absolute top-0 left-0 w-full h-full bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+          <Loading />
+        </div>
+      )}
+    </div>
+  )
 }
 
 Chart.defaultProps = defaultProps

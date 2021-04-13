@@ -2,8 +2,13 @@ import { quadtree as d3_quadtree, Quadtree } from 'd3-quadtree'
 import { scaleLinear, ScaleLinear } from 'd3-scale'
 import { event as d3_event, select } from 'd3-selection'
 import { annotationCallout } from 'd3-svg-annotation'
-import { zoom as d3_zoom } from 'd3-zoom'
+import { zoom as d3_zoom, ZoomBehavior } from 'd3-zoom'
 import * as fc from 'd3fc'
+import {
+  CHROMA_DEFAULT,
+  HEX_RADIUS_DEFAULT,
+  ZOOM_SCALE_DEFAULT,
+} from './consts'
 import { Datum } from './datum'
 import HexbinColor from './hexbin-color'
 import {
@@ -19,31 +24,22 @@ import color from './webgl'
 const RENDER_MS = 750
 const SCALE_MS = 2000
 
-export interface ScatterMillionOptions<T extends Datum> {
-  initialData?: T[]
-  defaultColor?: string
-  annotate?: (d: T) => SvgAnnotation
-  zoomScale?: [number, number]
-}
+export type Scatterplot = ReturnType<typeof createScatterplot>
 
-export default function scatterplot<T extends Datum>(
-  container: HTMLDivElement,
-  options: ScatterMillionOptions<T> = {}
+export default function createScatterplot<T extends Datum>(
+  container: HTMLDivElement
 ) {
-  const {
-    defaultColor = '#565a5e',
-    initialData,
-    annotate,
-    zoomScale = [0.5, 40],
-  } = options
-
-  // const data: Datum[] = range(50).map(randomDatum)
   let data: T[] = []
   let quadtree: Quadtree<T>
   const annotations: SvgAnnotation[] = []
-
   let lastRender = 0
   let lastScale = 0
+
+  let hexRadius = HEX_RADIUS_DEFAULT
+  let chroma = CHROMA_DEFAULT
+  let annotate: ((d: T) => SvgAnnotation) | undefined
+  let defaultColor = '#565a5e'
+  let zoomScale = ZOOM_SCALE_DEFAULT
 
   // const extents = Extents({ padding: 25, include: [0] })
   const percents = QuadrantPercents()
@@ -120,13 +116,19 @@ export default function scatterplot<T extends Datum>(
       }
     })
 
-  const zoom = d3_zoom()
-    .scaleExtent(zoomScale)
-    .on('zoom', () => {
-      xScale.domain(d3_event.transform.rescaleX(xScaleOriginal).domain())
-      yScale.domain(d3_event.transform.rescaleY(yScaleOriginal).domain())
-      render()
-    })
+  let zoom: ZoomBehavior<Element, unknown>
+
+  const updateZoom = () => {
+    zoom = d3_zoom()
+      .scaleExtent(zoomScale)
+      .on('zoom', () => {
+        xScale.domain(d3_event.transform.rescaleX(xScaleOriginal).domain())
+        yScale.domain(d3_event.transform.rescaleY(yScaleOriginal).domain())
+        render()
+      })
+  }
+
+  updateZoom()
 
   const pointer = fc.pointer().on('point', ([coord]: readonly [Datum]) => {
     handleMouseMove(coord)
@@ -175,9 +177,9 @@ export default function scatterplot<T extends Datum>(
   }
 
   function updateColors() {
-    const chroma = 'CubehelixDefault'
-    const radius = 0.15
-    const hexbinColor = HexbinColor(data, chroma, radius)
+    if (data.length === 0) return
+
+    const hexbinColor = HexbinColor(data, chroma, hexRadius)
     pointSeries.decorate(hexbinColor)
   }
 
@@ -187,7 +189,7 @@ export default function scatterplot<T extends Datum>(
     select(container).datum({ data, annotations }).call(chart)
   }
 
-  function add(newData: T[], { done }: { done?: boolean } = {}) {
+  function addData(newData: T[], { done }: { done?: boolean } = {}) {
     data = data.concat(newData)
     // extents.add(newData)
     // extents.reversePad(0.95, 0.95)
@@ -210,9 +212,37 @@ export default function scatterplot<T extends Datum>(
     if (done || now - lastRender > RENDER_MS) render()
   }
 
-  if (initialData) add(initialData, { done: true })
+  addData.hexRadius = (value: number) => {
+    hexRadius = value
+    updateColors()
+    render()
+    return addData
+  }
+
+  addData.chroma = (value: string) => {
+    chroma = value
+    updateColors()
+    render()
+    return addData
+  }
+
+  addData.zoomScale = (value: [number, number]) => {
+    zoomScale = value
+    updateZoom()
+    return addData
+  }
+
+  addData.defaultColor = (value: string) => {
+    defaultColor = value
+    return addData
+  }
+
+  addData.annotate = (value: (d: T) => SvgAnnotation) => {
+    annotate = value
+    return addData
+  }
 
   render()
 
-  return { render, add }
+  return addData
 }

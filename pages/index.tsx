@@ -2,12 +2,14 @@ import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import Header from '../components/header'
+import Loading from '../components/loading'
+import { CHROMA_DEFAULT, HEX_RADIUS_DEFAULT } from '../lib/consts'
 import { isBrowser } from '../util/dom'
 import { useTheme } from '../util/use-theme'
 
-const Scatterplot = dynamic(() => import('../components/chart'), {
+const Chart = dynamic(() => import('../components/chart'), {
   ssr: false,
-  loading: () => <div>Loading...</div>,
+  loading: () => <Loading />,
 })
 
 type Props = typeof defaultProps
@@ -19,6 +21,8 @@ const defaultProps = {
 export default function Home(_: Props) {
   const { theme: rawTheme } = useTheme()
   const [theme, setTheme] = useState('dark')
+  const [hexRadius, setHexRadius] = useState(HEX_RADIUS_DEFAULT)
+  const [chroma, setChroma] = useState(CHROMA_DEFAULT)
 
   // Prevent style mismatch when SSR by waiting for client-side
   useEffect(() => {
@@ -51,10 +55,16 @@ export default function Home(_: Props) {
         />
       </Head>
 
-      <Header />
+      <Header
+        hexRadius={hexRadius}
+        chroma={chroma}
+        onHexRadiusChange={setHexRadius}
+        onChromaChange={setChroma}
+      />
 
       <main className="w-screen h-screen pt-24">
-        <Scatterplot />
+        {/* <Loading /> */}
+        <Chart hexRadius={hexRadius} chroma={chroma} />
       </main>
     </div>
   )

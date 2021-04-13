@@ -13,7 +13,7 @@ export default function ChromaSelect({ value, onChange }: Props) {
     <div className="flex-start flex-col ml-6">
       <label className="text-xs text-gray-500 mb-0.5">Chromatic Scale</label>
       <select
-        className="w-36 h-6 border border-gray-400 dark:border-transparent dark:bg-gray-700 rounded"
+        className="w-36 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
       >

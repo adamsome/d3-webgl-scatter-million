@@ -63,24 +63,26 @@ export default function ThemeSwitch(_: Props) {
   )
 
   return (
-    <Switch
-      className="ml-6 my-2"
-      selected={selected}
-      lhsIcon={sunIcon()}
-      lhsDimBG="white"
-      lhsDimFG="black"
-      lhsLitBG="white"
-      lhsLitFG="black"
-      rhsIcon={moonIcon()}
-      rhsDimBG="black"
-      rhsDimFG="white"
-      rhsLitBG="black"
-      rhsLitFG="white"
-      round={false}
-      size={9}
-      borderWidth={4}
-      onToggle={() => toggleTheme()}
-    />
+    <div className="flex-start flex-col ml-6">
+      <label className="text-xs text-gray-500 mb-0.5">Theme</label>
+      <div className="h-7 flex-center flex-col">
+        <Switch
+          selected={selected}
+          lhsIcon={sunIcon()}
+          lhsDimBG="gray-800"
+          lhsDimFG="gray-500"
+          lhsLitBG="white"
+          lhsLitFG="yellow-500"
+          rhsIcon={moonIcon()}
+          rhsDimBG="gray-300"
+          rhsDimFG="gray-400"
+          rhsLitBG="black"
+          rhsLitFG="blue-600"
+          size={6}
+          onToggle={() => toggleTheme()}
+        />
+      </div>
+    </div>
   )
 }
 

@@ -31,7 +31,7 @@ export default function Home(_: Props) {
     <div className="bg-white dark:bg-black text-black dark:text-white transition-colors">
       <Head>
         <meta charSet="utf-8" />
-        <title>Create Next App w/ Dark Mode</title>
+        <title>D3 WebGL Scatterplot</title>
 
         <link
           rel="icon"

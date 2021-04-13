@@ -2,7 +2,7 @@ import { ScaleLinear } from 'd3-scale'
 import { BaseType, Selection } from 'd3-selection'
 import { Datum } from './datum'
 
-interface PercentsByQuadrant {
+interface QuadrantPercents {
   1: number
   2: number
   3: number
@@ -13,11 +13,11 @@ const formatRound = (total: number) => (count: number): number => {
   return Math.round(((100 * count) / total) * 10) / 10
 }
 
-export function createPercentsByQuadrant(data: Datum[]): PercentsByQuadrant {
+export function QuadrantPercents(data?: Datum[]) {
   let count = 0
   const quadrants = { 1: 0, 2: 0, 3: 0, 4: 0 }
 
-  data.forEach((d) => {
+  function addOne(d: Datum): void {
     count++
     if (d.y >= 0) {
       if (d.x >= 0) {
@@ -32,28 +32,40 @@ export function createPercentsByQuadrant(data: Datum[]): PercentsByQuadrant {
         quadrants[3]++
       }
     }
-  })
-
-  const round = formatRound(count)
-  return {
-    1: round(quadrants[1]),
-    2: round(quadrants[2]),
-    3: round(quadrants[3]),
-    4: round(quadrants[4]),
   }
+
+  function add(data: Datum | Datum[]): void {
+    if (!Array.isArray(data)) return addOne(data)
+    data.forEach(addOne)
+  }
+
+  if (data) data.forEach(add)
+
+  function value(): QuadrantPercents {
+    const round = formatRound(count)
+    return {
+      1: round(quadrants[1]),
+      2: round(quadrants[2]),
+      3: round(quadrants[3]),
+      4: round(quadrants[4]),
+    }
+  }
+
+  return { add, value }
 }
 
 export const decoratePercentsByQuadrant = (
-  percents: PercentsByQuadrant,
+  percents: QuadrantPercents,
   xScale: ScaleLinear<number, number>,
-  yScale: ScaleLinear<number, number>
-) => (xOriginLine: any): void => {
-  xOriginLine = xOriginLine.attr(
+  yScale: ScaleLinear<number, number>,
+  lineSelection: any
+): void => {
+  lineSelection = lineSelection.attr(
     'class',
-    `${xOriginLine.attr('class') ?? ''} origin`
+    `${lineSelection.attr('class') ?? ''} origin`
   )
-  xOriginLine.selectAll('text').remove()
-  xOriginLine.selectAll('rect').remove()
+  lineSelection.selectAll('text').remove()
+  lineSelection.selectAll('rect').remove()
 
   const xEnd = xScale.range()[1]
   const xOrigin = xScale(0)
@@ -68,11 +80,11 @@ export const decoratePercentsByQuadrant = (
   const yOriginStart = Math.max(yOriginFromStart + 40, -24)
   const yOriginEnd = Math.min(yOriginFromEnd - 30, 41)
 
-  const top = xOriginLine.select('g.top-handle')
+  const top = lineSelection.select('g.top-handle')
   renderQuadrantPercentText(top, 2, xOriginBefore, yOriginEnd, percents)
   renderQuadrantPercentText(top, 1, xOriginEnd, yOriginEnd, percents)
 
-  const bottom = xOriginLine.select('g.bottom-handle')
+  const bottom = lineSelection.select('g.bottom-handle')
   renderQuadrantPercentText(bottom, 3, xOriginBefore, yOriginStart, percents)
   renderQuadrantPercentText(bottom, 4, xOriginEnd, yOriginStart, percents)
 }
@@ -82,7 +94,7 @@ function renderQuadrantPercentText(
   quadrant: 1 | 2 | 3 | 4,
   x: number,
   y: number,
-  percents: PercentsByQuadrant
+  percents: QuadrantPercents
 ): void {
   const rect = handle
     .append('rect')

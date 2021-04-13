@@ -1,99 +1,202 @@
-import { range } from 'd3-array'
-import { scaleLinear } from 'd3-scale'
-import { event as d3Event, select } from 'd3-selection'
-import { zoom as d3Zoom } from 'd3-zoom'
+import { quadtree as d3_quadtree, Quadtree } from 'd3-quadtree'
+import { scaleLinear, ScaleLinear } from 'd3-scale'
+import { event as d3_event, select } from 'd3-selection'
+import { annotationCallout } from 'd3-svg-annotation'
+import { zoom as d3_zoom } from 'd3-zoom'
 import * as fc from 'd3fc'
 import { Datum } from './datum'
 import {
-  createPercentsByQuadrant,
   decoratePercentsByQuadrant,
-} from './quadrant'
+  QuadrantPercents,
+} from './quadrant-percents'
+import svgAnnotation, {
+  DataWithAnnotations,
+  SvgAnnotation,
+} from './svg-annotation'
 import color from './webgl'
 
-export interface ScatterMillionOptions {
+const RENDER_MS = 750
+const SCALE_MS = 2000
+
+export interface ScatterMillionOptions<T extends Datum> {
+  initialData?: T[]
   defaultColor?: string
+  annotate?: (d: T) => SvgAnnotation
 }
 
-function randomDatum(): Datum {
-  return { x: Math.random() * 50, y: Math.random() }
-}
-
-function scatterplot(
+export default function scatterplot<T extends Datum>(
   container: HTMLDivElement,
-  options: ScatterMillionOptions = {}
+  options: ScatterMillionOptions<T> = {}
 ) {
-  const { defaultColor = '#565a5e' } = options
+  const { defaultColor = '#565a5e', initialData, annotate } = options
 
-  const data: Datum[] = range(50).map(randomDatum)
+  // const data: Datum[] = range(50).map(randomDatum)
+  let data: T[] = []
+  let quadtree: Quadtree<T>
+  const annotations: SvgAnnotation[] = []
 
-  const xScale = scaleLinear().domain([0, 50])
-  const yScale = scaleLinear().domain([0, 1])
-  const xScaleOriginal = xScale.copy()
-  const yScaleOriginal = yScale.copy()
+  let lastRender = 0
+  let lastScale = 0
 
-  const percents = createPercentsByQuadrant(data)
+  // const extents = Extents({ padding: 25, include: [0] })
+  const percents = QuadrantPercents()
 
-  const zoom = d3Zoom()
-    .scaleExtent([0.1, 20])
-    .on('zoom', () => {
-      xScale.domain(d3Event.transform.rescaleX(xScaleOriginal).domain())
-      yScale.domain(d3Event.transform.rescaleY(yScaleOriginal).domain())
-      render()
-    })
+  let xScale: ScaleLinear<number, number>
+  let yScale: ScaleLinear<number, number>
+  let xScaleOriginal: ScaleLinear<number, number>
+  let yScaleOriginal: ScaleLinear<number, number>
 
-  const colorDefault = fc
-    .webglFillColor()
-    .value(() => color(defaultColor))
-    .data(data)
+  const xExtent = fc
+    .extentLinear()
+    .accessors([(d: T) => d.x])
+    .include([0])
+
+  const yExtent = fc
+    .extentLinear()
+    .accessors([(d: T) => d.y])
+    .include([0])
+
+  function updateScales() {
+    if (data.length > 0) lastScale = Date.now()
+
+    if (!xScale) xScale = scaleLinear()
+    xScale.domain(xExtent(data))
+    xScaleOriginal = xScale.copy()
+
+    if (!yScale) yScale = scaleLinear()
+    yScale.domain(yExtent(data))
+    yScaleOriginal = yScale.copy()
+  }
+
+  updateScales()
 
   const pointSeries = fc
     .seriesWebglPoint()
-    .equals((a: Datum[], b: Datum[]) => a === b)
-    .size(5)
-    .crossValue((d: Datum) => d.x)
-    .mainValue((d: Datum) => d.y)
-    .decorate(colorDefault)
+    .equals((a: T[], b: T[]) => a === b)
+    .size(1)
+    .crossValue((d: T) => d.x)
+    .mainValue((d: T) => d.y)
+    .decorate((program: any, data: T[]) => {
+      fc
+        .webglFillColor()
+        .value(() => color(defaultColor))
+        .data(data)(program)
+    })
+
+  const multiPointSeries = fc
+    .seriesWebglMulti()
+    .series([pointSeries])
+    .mapping((d: DataWithAnnotations<T>) => d.data)
+
+  const calloutSeries = svgAnnotation().notePadding(15).type(annotationCallout)
 
   const gridlines = fc.annotationSvgGridline().xScale(xScale).yScale(yScale)
 
   const xOriginLine = fc
     .annotationSvgLine()
     .orient('vertical')
-    .decorate(decoratePercentsByQuadrant(percents, xScale, yScale))
+    .decorate((sel: any) => {
+      decoratePercentsByQuadrant(percents.value(), xScale, yScale, sel)
+    })
 
   const yOriginLine = fc.annotationSvgLine()
 
   const multiLines = fc
     .seriesSvgMulti()
-    .series([gridlines, xOriginLine, yOriginLine])
-    .mapping((_d: Datum[], i: number, series: any[]) => {
+    .series([gridlines, xOriginLine, yOriginLine, calloutSeries])
+    .mapping((d: DataWithAnnotations<T>, i: number, series: any[]) => {
       switch (series[i]) {
+        case calloutSeries:
+          return d.annotations
         default:
           return [0]
       }
     })
 
+  const zoom = d3_zoom()
+    .scaleExtent([0.1, 20])
+    .on('zoom', () => {
+      xScale.domain(d3_event.transform.rescaleX(xScaleOriginal).domain())
+      yScale.domain(d3_event.transform.rescaleY(yScaleOriginal).domain())
+      render()
+    })
+
+  const pointer = fc.pointer().on('point', ([coord]: readonly [Datum]) => {
+    handleMouseMove(coord)
+  })
+
   const chart = fc
     .chartCartesian(xScale, yScale)
     .yOrient('left')
-    .webglPlotArea(pointSeries)
     .svgPlotArea(multiLines)
+    .webglPlotArea(multiPointSeries)
     .decorate((sel: any) =>
       sel
         .enter()
         .select('d3fc-svg.plot-area')
         .on('measure.range', () => {
-          xScaleOriginal.range([0, d3Event.detail.width])
-          yScaleOriginal.range([d3Event.detail.height, 0])
+          xScaleOriginal.range([0, d3_event.detail.width])
+          yScaleOriginal.range([d3_event.detail.height, 0])
         })
         .call(zoom)
+        .call(pointer)
     )
 
-  const render = () => {
-    select(container).datum(data).call(chart)
+  function handleMouseMove(coord?: Datum): void {
+    annotations.pop()
+    if (!coord || !quadtree || !annotate) return
+
+    const x = xScale.invert(coord.x)
+    const y = yScale.invert(coord.y)
+    const r = Math.abs(x - xScale.invert(coord.x - 20))
+    const d = quadtree.find(x, y, r)
+
+    if (d) {
+      const annotation = annotate(d)
+      const dx = xScale(d.x)
+      const xmax = xScale.range()[1]
+      if (dx > xmax - 400) annotation.dx = -annotation.dx
+
+      const dy = yScale(d.y)
+      const ymax = yScale.range()[0]
+      if (dy > ymax - 400) annotation.dy = -annotation.dy
+
+      annotations[0] = annotation
+    }
+
+    render()
   }
 
-  render()
-}
+  function render() {
+    if (data.length > 0) lastRender = Date.now()
 
-export default scatterplot
+    select(container).datum({ data, annotations }).call(chart)
+  }
+
+  function add(newData: T[], { done }: { done?: boolean } = {}) {
+    data = data.concat(newData)
+    percents.add(newData)
+    // extents.add(newData)
+    // extents.reversePad(0.95, 0.95)
+
+    const now = Date.now()
+
+    if (done || now - lastScale > SCALE_MS) updateScales()
+
+    if (done) {
+      // extents.clear()
+      quadtree = d3_quadtree<T>()
+        .x((d) => d.x)
+        .y((d) => d.y)
+        .addAll(data)
+    }
+
+    if (done || now - lastRender > RENDER_MS) render()
+  }
+
+  if (initialData) add(initialData, { done: true })
+
+  render()
+
+  return { render, add }
+}

@@ -25,7 +25,7 @@
 
   line.gridline-x,
   line.gridline-y {
-    @apply text-gray-300 dark:text-gray-800 text-opacity-75 stroke-current;
+    @apply text-gray-300 dark:text-gray-700 text-opacity-40 dark:text-opacity-75 stroke-current;
   }
 
   text.quadrant {
@@ -33,7 +33,7 @@
   }
 
   rect.quadrant {
-    @apply text-gray-200 dark:text-gray-900 text-opacity-75 fill-current;
+    @apply text-gray-200 dark:text-gray-900 text-opacity-75 dark:text-opacity-75 fill-current;
   }
 
   .annotations .annotation-note-label,
@@ -41,8 +41,12 @@
     @apply text-gray-800 dark:text-gray-200 fill-current text-sm;
   }
 
+  .annotations .annotation-note-title {
+    @apply font-semibold;
+  }
+
   .annotations .annotation-note-bg {
-    @apply text-gray-200 dark:text-gray-900 text-opacity-75 fill-current;
+    @apply text-gray-200 dark:text-gray-900 text-opacity-75 dark:text-opacity-75 fill-current;
 
     fill-opacity: 1;
   }

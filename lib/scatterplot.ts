@@ -5,6 +5,7 @@ import { annotationCallout } from 'd3-svg-annotation'
 import { zoom as d3_zoom } from 'd3-zoom'
 import * as fc from 'd3fc'
 import { Datum } from './datum'
+import HexbinColor from './hexbin-color'
 import {
   decoratePercentsByQuadrant,
   QuadrantPercents,
@@ -22,13 +23,19 @@ export interface ScatterMillionOptions<T extends Datum> {
   initialData?: T[]
   defaultColor?: string
   annotate?: (d: T) => SvgAnnotation
+  zoomScale?: [number, number]
 }
 
 export default function scatterplot<T extends Datum>(
   container: HTMLDivElement,
   options: ScatterMillionOptions<T> = {}
 ) {
-  const { defaultColor = '#565a5e', initialData, annotate } = options
+  const {
+    defaultColor = '#565a5e',
+    initialData,
+    annotate,
+    zoomScale = [0.5, 40],
+  } = options
 
   // const data: Datum[] = range(50).map(randomDatum)
   let data: T[] = []
@@ -96,7 +103,7 @@ export default function scatterplot<T extends Datum>(
     .annotationSvgLine()
     .orient('vertical')
     .decorate((sel: any) => {
-      decoratePercentsByQuadrant(percents.value(), xScale, yScale, sel)
+      decoratePercentsByQuadrant(percents, xScale, yScale, sel)
     })
 
   const yOriginLine = fc.annotationSvgLine()
@@ -114,7 +121,7 @@ export default function scatterplot<T extends Datum>(
     })
 
   const zoom = d3_zoom()
-    .scaleExtent([0.1, 20])
+    .scaleExtent(zoomScale)
     .on('zoom', () => {
       xScale.domain(d3_event.transform.rescaleX(xScaleOriginal).domain())
       yScale.domain(d3_event.transform.rescaleY(yScaleOriginal).domain())
@@ -167,6 +174,13 @@ export default function scatterplot<T extends Datum>(
     render()
   }
 
+  function updateColors() {
+    const chroma = 'CubehelixDefault'
+    const radius = 0.15
+    const hexbinColor = HexbinColor(data, chroma, radius)
+    pointSeries.decorate(hexbinColor)
+  }
+
   function render() {
     if (data.length > 0) lastRender = Date.now()
 
@@ -175,7 +189,6 @@ export default function scatterplot<T extends Datum>(
 
   function add(newData: T[], { done }: { done?: boolean } = {}) {
     data = data.concat(newData)
-    percents.add(newData)
     // extents.add(newData)
     // extents.reversePad(0.95, 0.95)
 
@@ -185,6 +198,9 @@ export default function scatterplot<T extends Datum>(
 
     if (done) {
       // extents.clear()
+      percents.add(data)
+      updateColors()
+
       quadtree = d3_quadtree<T>()
         .x((d) => d.x)
         .y((d) => d.y)

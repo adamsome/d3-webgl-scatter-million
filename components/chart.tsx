@@ -8,6 +8,7 @@ type Props = typeof defaultProps
 interface BookResponseDatum {
   title?: string
   first_author_name?: string
+  language?: string
   date?: string
   x: string
   y: string
@@ -35,9 +36,10 @@ function parseDatum(d: BookResponseDatum): BookDatum {
 
 function annotate(d: BookDatum): SvgAnnotation {
   let title = d.title ?? ''
-  if (title.length > 50) title = title.substr(0, 50)
+  if (title.length > 50) title = title.substr(0, 50) + '...'
 
-  const label = `${d.first_author_name ?? 'Unknown'} ${d.date}`
+  let label = `${d.first_author_name ?? 'Unknown'} \n${d.date}`
+  if (d.language) label += ` \n(${d.language})`
 
   const note = { title, label, wrapSplitter: /\n/, bgPadding: 3 }
   return { note, x: d.x, y: d.y, dx: 20, dy: 20 }

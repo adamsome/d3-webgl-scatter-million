@@ -2,7 +2,7 @@ import { ScaleLinear } from 'd3-scale'
 import { BaseType, Selection } from 'd3-selection'
 import { Datum } from './datum'
 
-interface QuadrantPercents {
+interface QuadrantPercentValues {
   1: number
   2: number
   3: number
@@ -12,6 +12,8 @@ interface QuadrantPercents {
 const formatRound = (total: number) => (count: number): number => {
   return Math.round(((100 * count) / total) * 10) / 10
 }
+
+type IQuadrantPercents = ReturnType<typeof QuadrantPercents>
 
 export function QuadrantPercents(data?: Datum[]) {
   let count = 0
@@ -41,7 +43,7 @@ export function QuadrantPercents(data?: Datum[]) {
 
   if (data) data.forEach(add)
 
-  function value(): QuadrantPercents {
+  function value(): QuadrantPercentValues {
     const round = formatRound(count)
     return {
       1: round(quadrants[1]),
@@ -51,11 +53,11 @@ export function QuadrantPercents(data?: Datum[]) {
     }
   }
 
-  return { add, value }
+  return { add, value, count: () => count }
 }
 
 export const decoratePercentsByQuadrant = (
-  percents: QuadrantPercents,
+  quadrantPercents: IQuadrantPercents,
   xScale: ScaleLinear<number, number>,
   yScale: ScaleLinear<number, number>,
   lineSelection: any
@@ -66,6 +68,8 @@ export const decoratePercentsByQuadrant = (
   )
   lineSelection.selectAll('text').remove()
   lineSelection.selectAll('rect').remove()
+
+  if (quadrantPercents.count() === 0) return
 
   const xEnd = xScale.range()[1]
   const xOrigin = xScale(0)
@@ -79,6 +83,8 @@ export const decoratePercentsByQuadrant = (
   const yOriginFromEnd = yEnd + yOrigin
   const yOriginStart = Math.max(yOriginFromStart + 40, -24)
   const yOriginEnd = Math.min(yOriginFromEnd - 30, 41)
+
+  const percents = quadrantPercents.value()
 
   const top = lineSelection.select('g.top-handle')
   renderQuadrantPercentText(top, 2, xOriginBefore, yOriginEnd, percents)
@@ -94,7 +100,7 @@ function renderQuadrantPercentText(
   quadrant: 1 | 2 | 3 | 4,
   x: number,
   y: number,
-  percents: QuadrantPercents
+  percents: QuadrantPercentValues
 ): void {
   const rect = handle
     .append('rect')

@@ -21,6 +21,7 @@ const defaultProps = {
 export default function Home(_: Props) {
   const { theme: rawTheme } = useTheme()
   const [theme, setTheme] = useState('dark')
+  const [count, setCount] = useState(0)
   const [hexRadius, setHexRadius] = useState(HEX_RADIUS_DEFAULT)
   const [chroma, setChroma] = useState(CHROMA_DEFAULT)
 
@@ -56,6 +57,7 @@ export default function Home(_: Props) {
       </Head>
 
       <Header
+        count={count}
         hexRadius={hexRadius}
         chroma={chroma}
         onHexRadiusChange={setHexRadius}
@@ -64,7 +66,7 @@ export default function Home(_: Props) {
 
       <main className="w-screen h-screen pt-24">
         {/* <Loading /> */}
-        <Chart hexRadius={hexRadius} chroma={chroma} />
+        <Chart hexRadius={hexRadius} chroma={chroma} onCountChange={setCount} />
       </main>
     </div>
   )

@@ -6,6 +6,7 @@ import Loading from './loading'
 type Props = typeof defaultProps & {
   hexRadius: number
   chroma: string
+  onCountChange?: (value: number) => void
 }
 
 interface BookResponseDatum {
@@ -48,7 +49,7 @@ function annotate(d: BookDatum): SvgAnnotation {
   return { note, x: d.x, y: d.y, dx: 20, dy: 20 }
 }
 
-export default function Chart({ hexRadius, chroma }: Props) {
+export default function Chart({ hexRadius, chroma, onCountChange }: Props) {
   const chartRef = useRef<Scatterplot>(null)
   const domRef = useRef<HTMLDivElement>(null)
   const tsvRef = useRef<Worker>()
@@ -78,7 +79,8 @@ export default function Chart({ hexRadius, chroma }: Props) {
         setLoading(false)
       }
 
-      chartRef.current(data, { done })
+      const count = chartRef.current(data, { done })
+      onCountChange(count)
       i++
     }
 

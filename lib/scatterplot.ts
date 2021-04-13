@@ -189,7 +189,7 @@ export default function createScatterplot<T extends Datum>(
     select(container).datum({ data, annotations }).call(chart)
   }
 
-  function addData(newData: T[], { done }: { done?: boolean } = {}) {
+  function addData(newData: T[], { done }: { done?: boolean } = {}): number {
     data = data.concat(newData)
     // extents.add(newData)
     // extents.reversePad(0.95, 0.95)
@@ -210,6 +210,8 @@ export default function createScatterplot<T extends Datum>(
     }
 
     if (done || now - lastRender > RENDER_MS) render()
+
+    return data.length
   }
 
   addData.hexRadius = (value: number) => {
@@ -241,6 +243,8 @@ export default function createScatterplot<T extends Datum>(
     annotate = value
     return addData
   }
+
+  addData.render = render
 
   render()
 

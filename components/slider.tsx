@@ -9,15 +9,23 @@ const defaultProps = {
   min: 0.01,
   max: 1,
   step: 0.05,
+  className: '',
 }
 
-export default function Slider({ value, min, max, step, onChange }: Props) {
+export default function Slider({
+  value,
+  min,
+  max,
+  step,
+  className,
+  onChange,
+}: Props) {
   return (
-    <div className="flex-start flex-col ml-6">
+    <div className={className}>
       <label className="text-xs text-gray-500 mb-0.5">Hex Radius</label>
       <div className="h-7 rounded flex-center flex-col px-2 bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">
         <input
-          className="w-28 bg-gray-300 dark:bg-gray-800 appearance-none h-0.5 rounded"
+          className="w-20 sm:w-24 bg-gray-300 dark:bg-gray-800 appearance-none h-0.5 rounded"
           type="range"
           min={min}
           max={max}

@@ -6,14 +6,16 @@ type Props = typeof defaultProps & {
   onChange?: (selected: string) => void
 }
 
-const defaultProps = {}
+const defaultProps = {
+  className: '',
+}
 
-export default function ChromaSelect({ value, onChange }: Props) {
+export default function ChromaSelect({ value, className, onChange }: Props) {
   return (
-    <div className="flex-start flex-col ml-6">
+    <div className={className}>
       <label className="text-xs text-gray-500 mb-0.5">Chromatic Scale</label>
       <select
-        className="w-48 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
+        className="w-36 sm:w-48 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
       >

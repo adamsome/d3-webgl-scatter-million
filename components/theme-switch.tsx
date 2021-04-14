@@ -5,9 +5,11 @@ import Switch from './switch'
 
 type Props = typeof defaultProps
 
-const defaultProps = {}
+const defaultProps = {
+  className: '',
+}
 
-export default function ThemeSwitch(_: Props) {
+export default function ThemeSwitch({ className }: Props) {
   const { theme: rawTheme, setTheme: setRawTheme } = useTheme()
   const [theme, setTheme] = useState('dark')
 
@@ -63,7 +65,7 @@ export default function ThemeSwitch(_: Props) {
   )
 
   return (
-    <div className="flex-start flex-col ml-6">
+    <div className={className}>
       <label className="text-xs text-gray-500 mb-0.5">Theme</label>
       <div className="h-7 flex-center flex-col">
         <Switch

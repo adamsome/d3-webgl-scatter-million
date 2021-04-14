@@ -1,5 +1,5 @@
 import React from 'react'
-import { CHROMA_NAMES } from '../lib/hexbin-color'
+import { CHROMA_GROUPS } from '../lib/chroma'
 
 type Props = typeof defaultProps & {
   value?: string
@@ -13,14 +13,18 @@ export default function ChromaSelect({ value, onChange }: Props) {
     <div className="flex-start flex-col ml-6">
       <label className="text-xs text-gray-500 mb-0.5">Chromatic Scale</label>
       <select
-        className="w-32 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
+        className="w-48 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
       >
-        {CHROMA_NAMES.map((name) => (
-          <option key={name} value={name}>
-            {name.replace('Default', '')}
-          </option>
+        {CHROMA_GROUPS.map((group) => (
+          <optgroup key={group.name} label={group.name}>
+            {group.items.map((it) => (
+              <option key={it.id} value={it.id}>
+                {it.name}
+              </option>
+            ))}
+          </optgroup>
         ))}
       </select>
     </div>

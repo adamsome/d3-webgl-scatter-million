@@ -15,10 +15,6 @@ interface Hex {
 const xAccessor = <T extends Datum>(d: T) => d.x
 const yAccessor = <T extends Datum>(d: T) => d.y
 
-export const CHROMA_NAMES = Object.keys(scaleChromatic)
-  .filter((name) => name.startsWith('interpolate'))
-  .map((name) => name.substr(11))
-
 function getChromaScale(name: string): (v: number) => string {
   const chroma = scaleChromatic[`interpolate${name}`]
   if (!chroma) throw TypeError(`No chromatic scale with name '${name}'.`)

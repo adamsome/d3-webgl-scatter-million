@@ -5,7 +5,7 @@ import { annotationCallout } from 'd3-svg-annotation'
 import { zoom as d3_zoom, ZoomBehavior } from 'd3-zoom'
 import * as fc from 'd3fc'
 import {
-  CHROMA_DEFAULT,
+  CHROMA_DARK_DEFAULT,
   HEX_RADIUS_DEFAULT,
   ZOOM_SCALE_DEFAULT,
 } from './consts'
@@ -45,7 +45,7 @@ export default function createScatterplot<T extends Datum>(
 
   // Option defaults
   let hexRadius = HEX_RADIUS_DEFAULT
-  let chroma = CHROMA_DEFAULT
+  let chroma = CHROMA_DARK_DEFAULT
   let annotate: ((d: T) => SvgAnnotation) | undefined
   let defaultColor = '#565a5e'
   let zoomScale = ZOOM_SCALE_DEFAULT

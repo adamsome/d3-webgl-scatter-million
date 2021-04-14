@@ -3,135 +3,436 @@
 exports[`Home page matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="jsx-1276654382 container"
+    class="bg-white dark:bg-black text-black dark:text-white transition-colors"
   >
-    <main
-      class="jsx-1276654382"
+    <nav
+      class="fixed z-20 flex-start flex-col w-full px-3 lg:px-6 bg-white bg-opacity-80 dark:bg-black dark:bg-opacity-80 lg:dark:bg-opacity-60 border-b dark:border-gray-900 transition-colors"
     >
-      <h1
-        class="jsx-1276654382 title"
-      >
-        Welcome to 
-        <a
-          class="jsx-1276654382"
-          href="https://nextjs.org"
-        >
-          Next.js!
-        </a>
-      </h1>
-      <p
-        class="jsx-1276654382 description"
-      >
-        Get started by editing 
-        <code
-          class="jsx-1276654382"
-        >
-          pages/index.tsx
-        </code>
-      </p>
-      <button
-        class="jsx-1276654382"
-      >
-        Test Button
-      </button>
       <div
-        class="jsx-1276654382 grid"
+        class="flex-center w-full h-12 lg:h-24 pt-2 lg:pb-2"
       >
-        <a
-          class="jsx-1276654382 card"
-          href="https://nextjs.org/docs"
-        >
-          <h3
-            class="jsx-1276654382"
-          >
-            Documentation →
-          </h3>
-          <p
-            class="jsx-1276654382"
-          >
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-        <a
-          class="jsx-1276654382 card"
-          href="https://nextjs.org/learn"
-        >
-          <h3
-            class="jsx-1276654382"
-          >
-            Learn →
-          </h3>
-          <p
-            class="jsx-1276654382"
-          >
-            Learn about Next.js in an interactive course with quizzes!
-          </p>
-        </a>
-        <a
-          class="jsx-1276654382 card"
-          href="https://github.com/vercel/next.js/tree/master/examples"
-        >
-          <h3
-            class="jsx-1276654382"
-          >
-            Examples →
-          </h3>
-          <p
-            class="jsx-1276654382"
-          >
-            Discover and deploy boilerplate example Next.js projects.
-          </p>
-        </a>
-        <a
-          class="jsx-1276654382 card"
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        >
-          <h3
-            class="jsx-1276654382"
-          >
-            Deploy →
-          </h3>
-          <p
-            class="jsx-1276654382"
-          >
-            Instantly deploy your Next.js site to a public URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-    <footer
-      class="jsx-1276654382"
-    >
-      <a
-        class="jsx-1276654382"
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        Powered by 
         <div
-          style="display: inline-block; max-width: 100%; overflow: hidden; position: relative; box-sizing: border-box; margin: 0px;"
+          class="hidden lg:block mr-2 lg:mr-4 cursor-pointer group"
         >
-          <div
-            style="box-sizing: border-box; display: block; max-width: 100%;"
+          <svg
+            height="64"
+            viewBox="0 0 210 297"
+            width="64"
           >
-            <img
-              alt=""
-              aria-hidden="true"
-              role="presentation"
-              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+"
-              style="max-width: 100%; display: block; margin: 0px; padding: 0px;"
+            <path
+              class="fill-current stroke-current text-black dark:text-white group-hover:text-blue-950 dark:group-hover:text-blue-200 transition-colors"
+              d="M 182.71107,203.76249 33.486632,203.05479 108.71174,74.176483 Z"
+              stroke-dasharray="none"
+              stroke-miterlimit="4"
+              stroke-width="20"
+            />
+            <path
+              class="stroke-current text-black dark:text-white group-hover:text-blue-400 transition-colors"
+              d="m 11.550336,148.28197 c 192.968534,0 192.968534,0 192.968534,0"
+              stroke-dasharray="none"
+              stroke-linecap="butt"
+              stroke-linejoin="miter"
+              stroke-miterlimit="4"
+              stroke-width="28"
+            />
+            <path
+              class="fill-current text-white dark:text-black group-hover:text-red-600 transition-colors"
+              d="m 92.191598,135.93724 65.524152,-0.3619 15.15418,25.69509 H 76.914526 Z"
+              stroke="transparent"
+              stroke-width="0"
+            />
+          </svg>
+        </div>
+        <div
+          class="block lg:hidden mr-2 lg:mr-4 cursor-pointer group"
+        >
+          <svg
+            height="40"
+            viewBox="0 0 210 297"
+            width="40"
+          >
+            <path
+              class="fill-current stroke-current text-black dark:text-white group-hover:text-blue-950 dark:group-hover:text-blue-200 transition-colors"
+              d="M 182.71107,203.76249 33.486632,203.05479 108.71174,74.176483 Z"
+              stroke-dasharray="none"
+              stroke-miterlimit="4"
+              stroke-width="20"
+            />
+            <path
+              class="stroke-current text-black dark:text-white group-hover:text-blue-400 transition-colors"
+              d="m 11.550336,148.28197 c 192.968534,0 192.968534,0 192.968534,0"
+              stroke-dasharray="none"
+              stroke-linecap="butt"
+              stroke-linejoin="miter"
+              stroke-miterlimit="4"
+              stroke-width="28"
+            />
+            <path
+              class="fill-current text-white dark:text-black group-hover:text-red-600 transition-colors"
+              d="m 92.191598,135.93724 65.524152,-0.3619 15.15418,25.69509 H 76.914526 Z"
+              stroke="transparent"
+              stroke-width="0"
+            />
+          </svg>
+        </div>
+        <div
+          class="relative -top-1 text-4xl lg:text-5xl text-gray-300 dark:text-gray-700 font-extralight italic ml-1 mr-1"
+        >
+          /
+        </div>
+        <div
+          class="flex-1 text-2xl lg:text-4xl font-extralight ml-4 lg:ml-6 overflow-hidden overflow-ellipsis whitespace-nowrap"
+        >
+          <span
+            class="font-semibold"
+          >
+            0
+          </span>
+           data points
+        </div>
+        <div
+          class="hidden lg:flex flex-col ml-6"
+        >
+          <label
+            class="text-xs text-gray-500 mb-0.5"
+          >
+            Hex Radius
+          </label>
+          <div
+            class="h-7 rounded flex-center flex-col px-2 bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75"
+          >
+            <input
+              class="w-20 sm:w-24 bg-gray-300 dark:bg-gray-800 appearance-none h-0.5 rounded"
+              max="1"
+              min="0.01"
+              step="0.05"
+              type="range"
+              value="0.15"
             />
           </div>
-          <img
-            alt="Vercel Logo"
-            decoding="async"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-            style="visibility: hidden; position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; box-sizing: border-box; padding: 0px; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
-          />
         </div>
-      </a>
-    </footer>
+        <div
+          class="hidden sm:flex flex-col ml-6"
+        >
+          <label
+            class="text-xs text-gray-500 mb-0.5"
+          >
+            Theme
+          </label>
+          <div
+            class="h-7 flex-center flex-col"
+          >
+            <button
+              class="
+        flex relative transition-colors group
+        bg-gray-800 border-2 border-gray-800 rounded-lg
+        focus:outline-none focus:ring-0
+        focus-visible:ring-4 focus-visible:ring-gray-800 focus-visible:ring-opacity-30
+        
+      "
+            >
+              <div
+                class="
+          flex justify-center items-center
+          bg-gray-800 rounded-md pl-3 transition-colors
+        "
+              >
+                <div
+                  class="w-6 h-6 bg-gray-800 transform -skew-x-12 transition-colors"
+                />
+                <div
+                  class="
+            absolute flex justify-center items-center transition-colors
+            w-2/4 h-full left-0 text-gray-500 group-hover:text-yellow-500
+          "
+                >
+                  <svg
+                    class="stroke-current stroke-2 "
+                    fill="transparent"
+                    height="80%"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    width="80%"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="5"
+                    />
+                    <line
+                      x1="12"
+                      x2="12"
+                      y1="1"
+                      y2="3"
+                    />
+                    <line
+                      x1="12"
+                      x2="12"
+                      y1="21"
+                      y2="23"
+                    />
+                    <line
+                      x1="4.22"
+                      x2="5.64"
+                      y1="4.22"
+                      y2="5.64"
+                    />
+                    <line
+                      x1="18.36"
+                      x2="19.78"
+                      y1="18.36"
+                      y2="19.78"
+                    />
+                    <line
+                      x1="1"
+                      x2="3"
+                      y1="12"
+                      y2="12"
+                    />
+                    <line
+                      x1="21"
+                      x2="23"
+                      y1="12"
+                      y2="12"
+                    />
+                    <line
+                      x1="4.22"
+                      x2="5.64"
+                      y1="19.78"
+                      y2="18.36"
+                    />
+                    <line
+                      x1="18.36"
+                      x2="19.78"
+                      y1="5.64"
+                      y2="4.22"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="
+          flex justify-center items-center
+          bg-black rounded-md pr-3 transition-colors
+        "
+              >
+                <div
+                  class="w-6 h-6 bg-black transform -skew-x-12 transition-colors"
+                />
+                <div
+                  class="
+            absolute flex justify-center items-center transition-colors
+            w-2/4 h-full right-0 text-blue-600 group-hover:text-blue-600
+          "
+                >
+                  <svg
+                    class="stroke-current stroke-2 fill-current"
+                    fill="transparent"
+                    height="80%"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    width="80%"
+                  >
+                    <path
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex-start w-full lg:hidden pb-3 overflow-y-auto"
+      >
+        <div
+          class="sm:hidden flex flex-col ml-1"
+        >
+          <label
+            class="text-xs text-gray-500 mb-0.5"
+          >
+            Theme
+          </label>
+          <div
+            class="h-7 flex-center flex-col"
+          >
+            <button
+              class="
+        flex relative transition-colors group
+        bg-gray-800 border-2 border-gray-800 rounded-lg
+        focus:outline-none focus:ring-0
+        focus-visible:ring-4 focus-visible:ring-gray-800 focus-visible:ring-opacity-30
+        
+      "
+            >
+              <div
+                class="
+          flex justify-center items-center
+          bg-gray-800 rounded-md pl-3 transition-colors
+        "
+              >
+                <div
+                  class="w-6 h-6 bg-gray-800 transform -skew-x-12 transition-colors"
+                />
+                <div
+                  class="
+            absolute flex justify-center items-center transition-colors
+            w-2/4 h-full left-0 text-gray-500 group-hover:text-yellow-500
+          "
+                >
+                  <svg
+                    class="stroke-current stroke-2 "
+                    fill="transparent"
+                    height="80%"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    width="80%"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="5"
+                    />
+                    <line
+                      x1="12"
+                      x2="12"
+                      y1="1"
+                      y2="3"
+                    />
+                    <line
+                      x1="12"
+                      x2="12"
+                      y1="21"
+                      y2="23"
+                    />
+                    <line
+                      x1="4.22"
+                      x2="5.64"
+                      y1="4.22"
+                      y2="5.64"
+                    />
+                    <line
+                      x1="18.36"
+                      x2="19.78"
+                      y1="18.36"
+                      y2="19.78"
+                    />
+                    <line
+                      x1="1"
+                      x2="3"
+                      y1="12"
+                      y2="12"
+                    />
+                    <line
+                      x1="21"
+                      x2="23"
+                      y1="12"
+                      y2="12"
+                    />
+                    <line
+                      x1="4.22"
+                      x2="5.64"
+                      y1="19.78"
+                      y2="18.36"
+                    />
+                    <line
+                      x1="18.36"
+                      x2="19.78"
+                      y1="5.64"
+                      y2="4.22"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="
+          flex justify-center items-center
+          bg-black rounded-md pr-3 transition-colors
+        "
+              >
+                <div
+                  class="w-6 h-6 bg-black transform -skew-x-12 transition-colors"
+                />
+                <div
+                  class="
+            absolute flex justify-center items-center transition-colors
+            w-2/4 h-full right-0 text-blue-600 group-hover:text-blue-600
+          "
+                >
+                  <svg
+                    class="stroke-current stroke-2 fill-current"
+                    fill="transparent"
+                    height="80%"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    width="80%"
+                  >
+                    <path
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div
+          class="flex flex-col ml-3"
+        >
+          <label
+            class="text-xs text-gray-500 mb-0.5"
+          >
+            Hex Radius
+          </label>
+          <div
+            class="h-7 rounded flex-center flex-col px-2 bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75"
+          >
+            <input
+              class="w-20 sm:w-24 bg-gray-300 dark:bg-gray-800 appearance-none h-0.5 rounded"
+              max="1"
+              min="0.01"
+              step="0.05"
+              type="range"
+              value="0.15"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main
+      class="w-screen h-screen"
+    >
+      <div
+        class="flex flex-center w-full h-full"
+      >
+        <svg
+          class="relative animate-spin h-5 w-5 m-2"
+          fill="none"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            fill="currentColor"
+          />
+        </svg>
+        Loading...
+      </div>
+    </main>
   </div>
 </DocumentFragment>
 `;

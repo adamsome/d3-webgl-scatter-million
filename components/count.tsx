@@ -24,8 +24,6 @@ export default function Count({ count: rawCount }: Props) {
   }, [])
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('count', rawCount)
     setCount(rawCount)
   }, [rawCount])
 

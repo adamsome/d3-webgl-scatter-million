@@ -82,7 +82,7 @@ export const decoratePercentsByQuadrant = (
   const yOriginFromStart = yOrigin - yStart
   const yOriginFromEnd = yEnd + yOrigin
   const yOriginStart = Math.max(yOriginFromStart + 40, -24)
-  const yOriginEnd = Math.min(yOriginFromEnd - 30, 41)
+  const yOriginEnd = Math.min(yOriginFromEnd - 30, 136)
 
   const percents = quadrantPercents.value()
 

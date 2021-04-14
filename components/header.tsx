@@ -27,7 +27,7 @@ export default function Header({
   onChromaChange,
 }: Props) {
   return (
-    <nav className="fixed flex-center w-full h-24 py-2 px-6 border-b dark:border-gray-900 transition-colors">
+    <nav className="fixed z-20 flex-center w-full h-24 py-2 px-6 bg-white bg-opacity-80 dark:bg-black dark:bg-opacity-60 border-b dark:border-gray-900 transition-colors">
       <div className="mr-2 sm:mr-4 cursor-pointer group">
         <Logo
           body="text-black dark:text-white group-hover:text-blue-950 dark:group-hover:text-blue-200 transition-colors"

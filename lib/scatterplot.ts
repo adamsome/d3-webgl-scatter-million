@@ -30,20 +30,27 @@ export default function createScatterplot<T extends Datum>(
   container: HTMLDivElement
 ) {
   let data: T[] = []
+
+  // Lookup points by coord position for annotations
   let quadtree: Quadtree<T>
   const annotations: SvgAnnotation[] = []
+
+  // Calculate percent of points in each quadrant
+  const percents = QuadrantPercents()
+  // const extents = Extents({ padding: 25, include: [0] })
+
+  // Timestamp trackers
   let lastRender = 0
   let lastScale = 0
 
+  // Option defaults
   let hexRadius = HEX_RADIUS_DEFAULT
   let chroma = CHROMA_DEFAULT
   let annotate: ((d: T) => SvgAnnotation) | undefined
   let defaultColor = '#565a5e'
   let zoomScale = ZOOM_SCALE_DEFAULT
 
-  // const extents = Extents({ padding: 25, include: [0] })
-  const percents = QuadrantPercents()
-
+  // Chart scaling
   let xScale: ScaleLinear<number, number>
   let yScale: ScaleLinear<number, number>
   let xScaleOriginal: ScaleLinear<number, number>
@@ -73,12 +80,16 @@ export default function createScatterplot<T extends Datum>(
 
   updateScales()
 
+  // Setup chart
+
+  // Individual data points rendered by webgl
   const pointSeries = fc
     .seriesWebglPoint()
     .equals((a: T[], b: T[]) => a === b)
     .size(1)
     .crossValue((d: T) => d.x)
     .mainValue((d: T) => d.y)
+    // Give points a default color until the hex colors are applied
     .decorate((program: any, data: T[]) => {
       fc
         .webglFillColor()
@@ -91,10 +102,17 @@ export default function createScatterplot<T extends Datum>(
     .series([pointSeries])
     .mapping((d: DataWithAnnotations<T>) => d.data)
 
+  // Setup annotations on hover
   const calloutSeries = svgAnnotation().notePadding(15).type(annotationCallout)
 
+  const pointer = fc.pointer().on('point', ([coord]: readonly [Datum]) => {
+    handleMouseMove(coord)
+  })
+
+  // Subtle vertical & horizontal lines at the axis tick marks
   const gridlines = fc.annotationSvgGridline().xScale(xScale).yScale(yScale)
 
+  // Vertical line at the x-origin, but also renders the quadrant percents
   const xOriginLine = fc
     .annotationSvgLine()
     .orient('vertical')
@@ -102,6 +120,7 @@ export default function createScatterplot<T extends Datum>(
       decoratePercentsByQuadrant(percents, xScale, yScale, sel)
     })
 
+  // Simple horizontal line at the y-origin
   const yOriginLine = fc.annotationSvgLine()
 
   const multiLines = fc
@@ -116,6 +135,7 @@ export default function createScatterplot<T extends Datum>(
       }
     })
 
+  // Setup chart zoom on mousewheel & pan on drag handling
   let zoom: ZoomBehavior<Element, unknown>
 
   const updateZoom = () => {
@@ -130,13 +150,11 @@ export default function createScatterplot<T extends Datum>(
 
   updateZoom()
 
-  const pointer = fc.pointer().on('point', ([coord]: readonly [Datum]) => {
-    handleMouseMove(coord)
-  })
-
+  // Setup all chart elements
   const chart = fc
     .chartCartesian(xScale, yScale)
     .yOrient('left')
+    .yAxisWidth('2.5em')
     .svgPlotArea(multiLines)
     .webglPlotArea(multiPointSeries)
     .decorate((sel: any) =>
@@ -151,6 +169,7 @@ export default function createScatterplot<T extends Datum>(
         .call(pointer)
     )
 
+  // Handle showing the annotation of the closest data point on hover
   function handleMouseMove(coord?: Datum): void {
     annotations.pop()
     if (!coord || !quadtree || !annotate) return
@@ -176,6 +195,7 @@ export default function createScatterplot<T extends Datum>(
     render()
   }
 
+  // Uses hexbin to increase color intensity where data is denser
   function updateColors() {
     if (data.length === 0) return
 
@@ -183,6 +203,7 @@ export default function createScatterplot<T extends Datum>(
     pointSeries.decorate(hexbinColor)
   }
 
+  // Draw the chart to the DOM
   function render() {
     if (data.length > 0) lastRender = Date.now()
 
@@ -194,11 +215,12 @@ export default function createScatterplot<T extends Datum>(
     // extents.add(newData)
     // extents.reversePad(0.95, 0.95)
 
+    // Update scales on a throttled basis as data comes in
     const now = Date.now()
-
     if (done || now - lastScale > SCALE_MS) updateScales()
 
     if (done) {
+      // Apply density chroma scheme & show percents now that all data is loaded
       // extents.clear()
       percents.add(data)
       updateColors()

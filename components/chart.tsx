@@ -90,7 +90,10 @@ export default function Chart({ hexRadius, chroma, onCountChange }: Props) {
 
   return (
     <div className="relative w-full h-full">
-      <div ref={domRef} className="chart relative w-full h-full pb-4"></div>
+      <div
+        ref={domRef}
+        className="chart relative w-full h-full pb-32 sm:pb-4"
+      ></div>
 
       {loading && (
         <div className="absolute top-0 left-0 w-full h-full bg-white dark:bg-black bg-opacity-75 dark:bg-opacity-50">

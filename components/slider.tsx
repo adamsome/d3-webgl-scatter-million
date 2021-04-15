@@ -1,4 +1,5 @@
 import React from 'react'
+import FormLabel from './form-label'
 
 type Props = typeof defaultProps & {
   value?: number
@@ -22,7 +23,7 @@ export default function Slider({
 }: Props) {
   return (
     <div className={className}>
-      <label className="text-xs text-gray-500 mb-0.5">Hex Radius</label>
+      <FormLabel>Hex Radius</FormLabel>
       <div className="h-7 rounded flex-center flex-col px-2 bg-white bg-opacity-75 dark:bg-black dark:bg-opacity-75">
         <input
           className="w-20 sm:w-24 bg-gray-300 dark:bg-gray-800 appearance-none h-0.5 rounded"

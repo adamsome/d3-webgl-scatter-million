@@ -1,5 +1,6 @@
 import React from 'react'
 import { CHROMA_GROUPS } from '../lib/chroma'
+import FormLabel from './form-label'
 
 type Props = typeof defaultProps & {
   value?: string
@@ -13,7 +14,7 @@ const defaultProps = {
 export default function ChromaSelect({ value, className, onChange }: Props) {
   return (
     <div className={className}>
-      <label className="text-xs text-gray-500 mb-0.5">Chromatic Scale</label>
+      <FormLabel>Chromatic Scale</FormLabel>
       <select
         className="w-36 sm:w-48 h-7 border-0 border-transparent bg-gray-300 dark:bg-gray-800 rounded-lg"
         value={value}

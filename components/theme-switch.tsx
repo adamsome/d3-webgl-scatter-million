@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { isBrowser } from '../util/dom'
 import { useTheme } from '../util/use-theme'
+import FormLabel from './form-label'
 import Switch from './switch'
 
 type Props = typeof defaultProps
@@ -66,7 +67,7 @@ export default function ThemeSwitch({ className }: Props) {
 
   return (
     <div className={className}>
-      <label className="text-xs text-gray-500 mb-0.5">Theme</label>
+      <FormLabel>Theme</FormLabel>
       <div className="h-7 flex-center flex-col">
         <Switch
           selected={selected}

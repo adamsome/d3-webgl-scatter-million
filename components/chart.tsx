@@ -62,26 +62,14 @@ export default function Chart({ hexRadius, chroma, onCountChange }: Props) {
       new URL('../lib/tsv.worker.ts', import.meta.url)
     )
 
-    let i = 0
-    let lastBytes = 0
     tsvRef.current.onmessage = (event) => {
-      const { data: rawData, done, bytes } = event.data
+      const { data: rawData, done } = event.data
       const data = rawData.map(parseDatum).filter((d: any) => d.date)
 
-      if (bytes - lastBytes > 1e7) {
-        // eslint-disable-next-line no-console
-        console.log('tsv-fetch', i, bytes, data[0])
-        lastBytes = bytes
-      }
-      if (done) {
-        // eslint-disable-next-line no-console
-        console.log('tsv-done', bytes)
-        setLoading(false)
-      }
+      if (done) setLoading(false)
 
       const count = chartRef.current(data, { done })
       onCountChange(count)
-      i++
     }
 
     setLoading(true)

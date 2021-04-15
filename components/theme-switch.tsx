@@ -71,16 +71,16 @@ export default function ThemeSwitch({ className }: Props) {
         <Switch
           selected={selected}
           lhsIcon={sunIcon()}
-          lhsDimBG="gray-800"
-          lhsDimFG="gray-500"
-          lhsLitBG="white"
-          lhsLitFG="yellow-500"
+          lhsDimBG="bg-gray-800 border-gray-800 focus-visible:ring-gray-800"
+          lhsDimFG="text-gray-500 group-hover:text-yellow-500"
+          lhsLitBG="bg-white border-white focus-visible:ring-white"
+          lhsLitFG="text-yellow-500"
           rhsIcon={moonIcon()}
-          rhsDimBG="gray-300"
-          rhsDimFG="gray-400"
-          rhsLitBG="black"
-          rhsLitFG="blue-600"
-          size={6}
+          rhsDimBG="bg-gray-300 border-gray-300 focus-visible:ring-gray-300"
+          rhsDimFG="text-gray-400 group-hover:text-blue-600"
+          rhsLitBG="bg-black border-black focus-visible:ring-black"
+          rhsLitFG="text-blue-600"
+          iconSize="w-6 h-6"
           onToggle={() => toggleTheme()}
         />
       </div>

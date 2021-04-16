@@ -58,17 +58,23 @@ export default function Chart({ hexRadius, chroma, onCountChange }: Props) {
   useEffect(() => {
     chartRef.current = createScatterplot(domRef.current).annotate(annotate)
 
+    async function setOptions() {
+      await chartRef.current.hexRadius(hexRadius)
+      await chartRef.current.chroma(chroma)
+    }
+    setOptions()
+
     tsvRef.current = new Worker(
       new URL('../lib/tsv.worker.ts', import.meta.url)
     )
 
-    tsvRef.current.onmessage = (event) => {
+    tsvRef.current.onmessage = async (event) => {
       const { data: rawData, done } = event.data
       const data = rawData.map(parseDatum).filter((d: any) => d.date)
 
       if (done) setLoading(false)
 
-      const count = chartRef.current(data, { done })
+      const count = await chartRef.current(data, { done })
       onCountChange(count)
     }
 
@@ -81,11 +87,23 @@ export default function Chart({ hexRadius, chroma, onCountChange }: Props) {
   }, [])
 
   useEffect(() => {
-    chartRef.current.hexRadius(hexRadius)
+    if (chartRef.current?.count() > 0) {
+      setLoading(true)
+      setTimeout(async () => {
+        await chartRef.current.hexRadius(hexRadius)
+        setLoading(false)
+      })
+    }
   }, [hexRadius])
 
   useEffect(() => {
-    chartRef.current.chroma(chroma)
+    if (chartRef.current?.count() > 0) {
+      setLoading(true)
+      setTimeout(async () => {
+        await chartRef.current.chroma(chroma)
+        setLoading(false)
+      }, 100)
+    }
   }, [chroma])
 
   return (

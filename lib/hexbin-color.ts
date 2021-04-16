@@ -21,7 +21,7 @@ function getChromaScale(name: string): (v: number) => string {
   return chroma
 }
 
-export default function HexbinColor<T extends Datum>(
+export default async function HexbinColor<T extends Datum>(
   data: T[],
   chromaName = 'CubehelixDefault',
   radius = 1

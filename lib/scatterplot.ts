@@ -196,10 +196,10 @@ export default function createScatterplot<T extends Datum>(
   }
 
   // Uses hexbin to increase color intensity where data is denser
-  function updateColors() {
+  async function updateColors() {
     if (data.length === 0) return
 
-    const hexbinColor = HexbinColor(data, chroma, hexRadius)
+    const hexbinColor = await HexbinColor(data, chroma, hexRadius)
     pointSeries.decorate(hexbinColor)
   }
 
@@ -210,7 +210,10 @@ export default function createScatterplot<T extends Datum>(
     select(container).datum({ data, annotations }).call(chart)
   }
 
-  function addData(newData: T[], { done }: { done?: boolean } = {}): number {
+  async function addData(
+    newData: T[],
+    { done }: { done?: boolean } = {}
+  ): Promise<number> {
     data = data.concat(newData)
     // extents.add(newData)
     // extents.reversePad(0.95, 0.95)
@@ -223,7 +226,7 @@ export default function createScatterplot<T extends Datum>(
       // Apply density chroma scheme & show percents now that all data is loaded
       // extents.clear()
       percents.add(data)
-      updateColors()
+      await updateColors()
 
       quadtree = d3_quadtree<T>()
         .x((d) => d.x)
@@ -236,16 +239,16 @@ export default function createScatterplot<T extends Datum>(
     return data.length
   }
 
-  addData.hexRadius = (value: number) => {
+  addData.hexRadius = async (value: number) => {
     hexRadius = value
-    updateColors()
+    await updateColors()
     render()
     return addData
   }
 
-  addData.chroma = (value: string) => {
+  addData.chroma = async (value: string) => {
     chroma = value
-    updateColors()
+    await updateColors()
     render()
     return addData
   }
@@ -265,6 +268,8 @@ export default function createScatterplot<T extends Datum>(
     annotate = value
     return addData
   }
+
+  addData.count = () => data.length
 
   addData.render = render
 

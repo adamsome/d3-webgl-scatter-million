@@ -1,8 +1,12 @@
 {
   "name": "d3-webgl-scatter-million",
+  "version": "1.0.0",
   "author": "@adamsome",
   "license": "MIT",
-  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adamsome/d3-webgl-scatter-million"
+  },
   "scripts": {
     "dev": "node --max_old_space_size=8192 ./node_modules/next/dist/bin/next dev",
     "build": "next build",
@@ -11,18 +15,18 @@
     "format": "prettier --write .",
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "test": "jest",
-    "test-all": "yarn lint && yarn type-check && yarn test"
+    "test-all": "npm run lint && npm run type-check && npm run test"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
+      "pre-push": "npm run type-check"
     }
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "yarn lint",
-      "yarn format"
+      "npm run lint",
+      "npm run format"
     ]
   },
   "dependencies": {

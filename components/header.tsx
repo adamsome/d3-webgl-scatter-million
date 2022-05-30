@@ -29,22 +29,28 @@ export default function Header({
   return (
     <nav className="fixed z-20 flex-start flex-col w-full px-3 lg:px-6 bg-white bg-opacity-80 dark:bg-black dark:bg-opacity-80 lg:dark:bg-opacity-60 border-b dark:border-gray-900 transition-colors">
       <div className="flex-center w-full h-12 lg:h-24 pt-2 lg:pb-2">
-        <div className="hidden lg:block mr-2 lg:mr-4 cursor-pointer group">
+        <a
+          href="https://www.adamso.me"
+          className="hidden lg:block mr-2 lg:mr-4 cursor-pointer group"
+        >
           <Logo
             body="text-black dark:text-white group-hover:text-blue-950 dark:group-hover:text-blue-200 transition-colors"
             line="text-black dark:text-white group-hover:text-blue-400 transition-colors"
             inner="text-white dark:text-black group-hover:text-red-600 transition-colors"
             big
           />
-        </div>
+        </a>
 
-        <div className="block lg:hidden mr-2 lg:mr-4 cursor-pointer group">
+        <a
+          href="https://www.adamso.me"
+          className="block lg:hidden mr-2 lg:mr-4 cursor-pointer group"
+        >
           <Logo
             body="text-black dark:text-white group-hover:text-blue-950 dark:group-hover:text-blue-200 transition-colors"
             line="text-black dark:text-white group-hover:text-blue-400 transition-colors"
             inner="text-white dark:text-black group-hover:text-red-600 transition-colors"
           />
-        </div>
+        </a>
 
         <div className="relative -top-1 text-4xl lg:text-5xl text-gray-300 dark:text-gray-700 font-extralight italic ml-1 mr-1">
           /
